@@ -2,6 +2,8 @@
 
 Retro arcade Vim learning game built with **Next.js 15**, **TypeScript**, **Tailwind CSS**, and **Redis**.
 
+> 📚 **[Full Documentation](./.specstory/INDEX.md)** - Specifications, guides, and migration notes
+
 > 🚀 **This is a Next.js migration** from the Vite + React version to properly support serverless API functions.
 
 ---
