@@ -1,26 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-arcade-bg: #0f1020;
+  --color-arcade-neon: #00fff0;
+  --color-arcade-pink: #ff2d95;
+  --color-arcade-green: #00ff7f;
+  --color-arcade-amber: #ffc107;
+  --font-press: 'Press Start 2P', monospace;
+  --shadow-glow: 0 0 8px rgba(0, 255, 240, 0.6), 0 0 16px rgba(255, 45, 149, 0.4);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade {
+  animation: fadeIn 0.4s ease-in-out;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: #0f1020;
+  color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
 }
