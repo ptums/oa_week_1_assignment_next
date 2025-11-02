@@ -8,6 +8,14 @@ Retro arcade Vim learning game built with **Next.js 15**, **TypeScript**, **Tail
 
 ---
 
+## 🎮 Experience Flow
+
+![Vim Arcade Experience Flow](./Design-Flow-Diagram.png)
+
+*Visual diagram showing the complete user experience flow, from welcome screen to gameplay to high scores.*
+
+---
+
 ## Why Next.js?
 
 The Vite version had `api/` directory files that **weren't actually serverless functions**. Next.js makes API routes work properly on Vercel.
@@ -208,7 +216,10 @@ vercel
 
 ## Documentation
 
-- [NEXT_MIGRATION_PLAN.md](./NEXT_MIGRATION_PLAN.md) - Detailed migration steps
+- **[📚 SpecStory Documentation](./.specstory/INDEX.md)** - Full specifications and guides
+- **[🎨 Design Flow](./Design-Flow-Diagram.png)** - Experience flow diagram
+- [Migration Plan](./.specstory/updates/NEXT_MIGRATION_PLAN.md) - Detailed migration steps
+- [Migration Complete](./.specstory/updates/MIGRATION_COMPLETE.md) - Migration summary
 - [Original Vite App](../vim-arcade-react/) - Source project
 
 ---
