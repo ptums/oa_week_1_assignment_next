@@ -20,6 +20,9 @@ Technical specs for major features and systems.
 ### 🔄 Updates & Migrations
 Recent changes, migrations, and improvements.
 
+- [Paste Question Fix](./updates/PASTE_QUESTION_FIX.md) - Fixed broken standalone paste question 🐛 **NEW**
+- [New Vim Challenges Added](./updates/NEW_CHALLENGES_ADDED.md) - 10 new questions (hjkl navigation, counts) ✨
+- [Challenges Summary](./updates/CHALLENGES_SUMMARY.md) - Complete breakdown of all questions ✨
 - [Next.js 15 Migration Plan](./updates/NEXT_MIGRATION_PLAN.md) - Detailed migration steps from Vite
 - [Migration Complete](./updates/MIGRATION_COMPLETE.md) - Full migration summary
 - [Redis Connection Fix](./updates/REDIS_CONNECTION_FIX.md) - TLS protocol configuration

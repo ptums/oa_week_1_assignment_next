@@ -1,16 +1,20 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useGame } from '@/contexts/GameContext';
-import { applyKeys } from '@/lib/game/engine/sim';
-import { pickRandom, type Question, QUESTION_BANK } from '@/lib/game/engine/questions';
-import VimBuffer from '@/components/VimBuffer';
-import FeedbackEmoji from '@/components/FeedbackEmoji';
-import GameOverDialog from '@/components/GameOverDialog';
+import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { useGame } from "@/contexts/GameContext";
+import { applyKeys } from "@/lib/game/engine/sim";
+import {
+  pickRandom,
+  type Question,
+  QUESTION_BANK,
+} from "@/lib/game/engine/questions";
+import VimBuffer from "@/components/VimBuffer";
+import FeedbackEmoji from "@/components/FeedbackEmoji";
+import GameOverDialog from "@/components/GameOverDialog";
 
-const DEFAULT_TEXT = ['Vim is a powerful text editor for efficient editing.'];
+const DEFAULT_TEXT = ["Vim is a powerful text editor for efficient editing."];
 
 export default function GamePage() {
   const router = useRouter();
@@ -32,13 +36,13 @@ export default function GamePage() {
     setCurrentQuestion,
     setExpectedAnswer,
     setFeedback,
-    resetGame
+    resetGame,
   } = useGame();
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQ, setCurrentQ] = useState<Question | null>(null);
-  const [inputValue, setInputValue] = useState('');
-  const [hintText, setHintText] = useState('');
+  const [inputValue, setInputValue] = useState("");
+  const [hintText, setHintText] = useState("");
   const [showGameOver, setShowGameOver] = useState(false);
   const [register] = useState<{ line?: string }>({});
   const [hintUsed, setHintUsed] = useState(false);
@@ -51,42 +55,7 @@ export default function GamePage() {
   const [animationKey, setAnimationKey] = useState(0);
   const [timerPaused, setTimerPaused] = useState(false);
 
-  useEffect(() => {
-    // Check if user has completed setup
-    const savedUsername = localStorage.getItem('vim-arcade-username');
-    if (!savedUsername) {
-      router.push('/');
-      return;
-    }
-
-    const qs = pickRandom(QUESTION_BANK.length);
-    setQuestions(qs);
-    startGame(qs);
-
-    return () => {
-      if (timerInterval.current) clearInterval(timerInterval.current);
-      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-      if (feedbackTimeout.current) clearTimeout(feedbackTimeout.current);
-      if (advanceTimeout.current) clearTimeout(advanceTimeout.current);
-      if (timerPausedTimeout.current) clearTimeout(timerPausedTimeout.current);
-    };
-  }, []);
-
-  function startGame(qs: Question[]) {
-    setScore(0);
-    setTimeLeft(60);
-    setQuestionIndex(0);
-    setGameActive(true);
-    setGameOver(false);
-    setShowGameOver(false);
-    setHintUsed(false);
-    setTimerPaused(false);
-
-    resetBuffer();
-    loadQuestion(qs, 0);
-    startTimer();
-  }
-
+  // Helper functions defined before callbacks that use them
   function startTimer() {
     if (timerInterval.current) clearInterval(timerInterval.current);
 
@@ -106,16 +75,10 @@ export default function GamePage() {
     }, duration);
   }
 
-  useEffect(() => {
-    if (gameActive && timeLeft <= 0) {
-      endGame();
-    }
-  }, [timeLeft, gameActive]);
-
   function resetBuffer() {
     setBuffer({
       lines: [...DEFAULT_TEXT],
-      cursor: { row: 0, col: 0 }
+      cursor: { row: 0, col: 0 },
     });
   }
 
@@ -128,9 +91,24 @@ export default function GamePage() {
     setCurrentQ(q);
     setCurrentQuestion(q.prompt);
     setExpectedAnswer(q.expected);
-    setHintText('');
+    setHintText("");
     setHintUsed(false);
     resetBuffer();
+  }
+
+  function startGame(qs: Question[]) {
+    setScore(0);
+    setTimeLeft(60);
+    setQuestionIndex(0);
+    setGameActive(true);
+    setGameOver(false);
+    setShowGameOver(false);
+    setHintUsed(false);
+    setTimerPaused(false);
+
+    resetBuffer();
+    loadQuestion(qs, 0);
+    startTimer();
   }
 
   function handleInput(value: string) {
@@ -148,7 +126,7 @@ export default function GamePage() {
     if (!trimmed || !currentQ) return;
 
     // Check for hint trigger
-    if (trimmed === '@@') {
+    if (trimmed === "@@") {
       showHint();
       return;
     }
@@ -158,7 +136,7 @@ export default function GamePage() {
       const result = applyKeys(buffer, trimmed, register);
       setBuffer(result.buf);
     } catch (e) {
-      console.error('Error applying keys:', e);
+      console.error("Error applying keys:", e);
     }
 
     // Check if answer is correct
@@ -176,13 +154,13 @@ export default function GamePage() {
     if (feedbackTimeout.current) clearTimeout(feedbackTimeout.current);
     if (advanceTimeout.current) clearTimeout(advanceTimeout.current);
 
-    setFeedback('correct');
+    setFeedback("correct");
     // Only award point if hint wasn't used
     if (!hintUsed) {
       setScore(score + 1);
     }
-    setInputValue('');
-    setHintText('');
+    setInputValue("");
+    setHintText("");
     setAnimationKey((prev) => prev + 1);
 
     // Brief pause (2s) to let user see the Vim command effect, then advance
@@ -195,8 +173,8 @@ export default function GamePage() {
   }
 
   function handleWrong() {
-    setFeedback('wrong');
-    setInputValue('');
+    setFeedback("wrong");
+    setInputValue("");
     setAnimationKey((prev) => prev + 1);
   }
 
@@ -204,9 +182,9 @@ export default function GamePage() {
     // Clear any existing feedback timeout
     if (feedbackTimeout.current) clearTimeout(feedbackTimeout.current);
 
-    setFeedback('hint');
-    setHintText(currentQ ? currentQ.expected[0] : '');
-    setInputValue('');
+    setFeedback("hint");
+    setHintText(currentQ ? currentQ.expected[0] : "");
+    setInputValue("");
     setHintUsed(true);
     setAnimationKey((prev) => prev + 1);
 
@@ -234,8 +212,45 @@ export default function GamePage() {
   }
 
   function handleGoToScores() {
-    router.push('/scores');
+    router.push("/scores");
   }
+
+  useEffect(() => {
+    // Check if user has completed setup
+    const savedUsername = localStorage.getItem("vim-arcade-username");
+    if (!savedUsername) {
+      router.push("/");
+      return;
+    }
+
+    // Schedule game initialization asynchronously to avoid cascading renders
+    const initTimer = setTimeout(() => {
+      const qs = pickRandom(QUESTION_BANK.length);
+      setQuestions(qs);
+      startGame(qs);
+    }, 0);
+
+    return () => {
+      clearTimeout(initTimer);
+      if (timerInterval.current) clearInterval(timerInterval.current);
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+      if (feedbackTimeout.current) clearTimeout(feedbackTimeout.current);
+      if (advanceTimeout.current) clearTimeout(advanceTimeout.current);
+      if (timerPausedTimeout.current) clearTimeout(timerPausedTimeout.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (gameActive && timeLeft <= 0) {
+      // Schedule state update asynchronously to avoid cascading renders
+      const timer = setTimeout(() => {
+        endGame();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, gameActive]);
 
   return (
     <>
@@ -256,38 +271,49 @@ export default function GamePage() {
         <motion.div
           key={animationKey}
           animate={
-            feedback === 'correct'
-              ? { scale: [1, 1.05, 1], transition: { duration: 0.5, ease: 'easeOut' } }
-              : feedback === 'wrong'
-              ? { x: [0, -10, 10, -10, 10, 0], transition: { duration: 0.5, ease: 'easeInOut' } }
-              : feedback === 'hint'
-              ? { y: [0, -5, 0, -5, 0], transition: { duration: 0.6, ease: 'easeInOut' } }
+            feedback === "correct"
+              ? {
+                  scale: [1, 1.05, 1],
+                  transition: { duration: 0.5, ease: "easeOut" },
+                }
+              : feedback === "wrong"
+              ? {
+                  x: [0, -10, 10, -10, 10, 0],
+                  transition: { duration: 0.5, ease: "easeInOut" },
+                }
+              : feedback === "hint"
+              ? {
+                  y: [0, -5, 0, -5, 0],
+                  transition: { duration: 0.6, ease: "easeInOut" },
+                }
               : {}
           }
           className={`w-full border-2 rounded-lg p-4 mb-6 transition-all duration-300 relative ${
-            feedback === 'correct'
-              ? 'bg-green-900/70 border-green-400 shadow-[0_0_20px_rgba(74,222,128,0.6)]'
-              : feedback === 'wrong'
-              ? 'bg-red-900/70 border-red-400 shadow-[0_0_20px_rgba(248,113,113,0.6)]'
-              : feedback === 'hint'
-              ? 'bg-amber-900/70 border-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.6)]'
-              : 'bg-[#0b0c1a]/90 border-[#00fff0] shadow-[0_0_8px_rgba(0,255,240,0.6),_0_0_16px_rgba(255,45,149,0.4)]'
+            feedback === "correct"
+              ? "bg-green-900/70 border-green-400 shadow-[0_0_20px_rgba(74,222,128,0.6)]"
+              : feedback === "wrong"
+              ? "bg-red-900/70 border-red-400 shadow-[0_0_20px_rgba(248,113,113,0.6)]"
+              : feedback === "hint"
+              ? "bg-amber-900/70 border-amber-400 shadow-[0_0_20px_rgba(251,191,36,0.6)]"
+              : "bg-[#0b0c1a]/90 border-[#00fff0] shadow-[0_0_8px_rgba(0,255,240,0.6),_0_0_16px_rgba(255,45,149,0.4)]"
           }`}
         >
           <p
             className={`text-sm md:text-base text-center font-semibold transition-colors duration-300 pr-12 ${
-              feedback === 'correct'
-                ? 'text-green-100'
-                : feedback === 'wrong'
-                ? 'text-red-100'
-                : feedback === 'hint'
-                ? 'text-amber-100'
-                : 'text-white'
+              feedback === "correct"
+                ? "text-green-100"
+                : feedback === "wrong"
+                ? "text-red-100"
+                : feedback === "hint"
+                ? "text-amber-100"
+                : "text-white"
             }`}
           >
             {currentQuestion}
             {hintText && (
-              <span className="ml-2 font-bold text-amber-200">→ {hintText}</span>
+              <span className="ml-2 font-bold text-amber-200">
+                → {hintText}
+              </span>
             )}
           </p>
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
@@ -335,4 +361,3 @@ export default function GamePage() {
     </>
   );
 }
-

@@ -16,7 +16,19 @@ export const QUESTION_BANK: Question[] = [
   { id: 'move-end', prompt: 'Move to the end of the current line', expected: ['$'] },
   { id: 'word-forward', prompt: 'Jump forward one word', expected: ['w'] },
   { id: 'word-backward', prompt: 'Jump backward one word', expected: ['b'] },
-  { id: 'delete-char', prompt: 'Delete the character under the cursor', expected: ['x'] }
+  { id: 'delete-char', prompt: 'Delete the character under the cursor', expected: ['x'] },
+  
+  // NEW: Navigation commands (hjkl)
+  { id: 'move-left', prompt: 'Move cursor one character to the left', expected: ['h'] },
+  { id: 'move-down', prompt: 'Move cursor one line down', expected: ['j'] },
+  { id: 'move-up', prompt: 'Move cursor one line up', expected: ['k'] },
+  { id: 'move-right', prompt: 'Move cursor one character to the right', expected: ['l'] },
+  
+  // NEW: Deletion with counts
+  { id: 'del-2-lines', prompt: 'Delete 2 consecutive lines', expected: ['2dd'] },
+  { id: 'del-3-lines', prompt: 'Delete 3 consecutive lines', expected: ['3dd'] },
+  { id: 'del-5-lines', prompt: 'Delete 5 consecutive lines', expected: ['5dd'] },
+  { id: 'del-10-lines', prompt: 'Delete 10 consecutive lines', expected: ['10dd'] }
 ];
 
 export function pickRandom(count = 10): Question[] {

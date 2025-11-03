@@ -1,28 +1,28 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import type { PlayerRecord } from '@/types';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import type { PlayerRecord } from "@/types";
 
 export default function HighScoresPage() {
   const router = useRouter();
   const [scores, setScores] = useState<PlayerRecord[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function loadScores() {
       try {
-        const response = await fetch('/api/scores', { cache: 'no-store' });
-        
+        const response = await fetch("/api/scores", { cache: "no-store" });
+
         if (!response.ok) {
-          throw new Error('Failed to fetch scores');
+          throw new Error("Failed to fetch scores");
         }
-        
+
         const data = await response.json();
         setScores(Array.isArray(data) ? data : []);
       } catch (e) {
-        setError('Error loading scores');
+        setError("Error loading scores");
         console.error(e);
       } finally {
         setLoading(false);
@@ -33,11 +33,11 @@ export default function HighScoresPage() {
   }, []);
 
   function handlePlay() {
-    router.push('/game');
+    router.push("/game");
   }
 
   function handleHome() {
-    router.push('/');
+    router.push("/");
   }
 
   return (
@@ -45,14 +45,6 @@ export default function HighScoresPage() {
       <h1 className="font-['Press_Start_2P'] text-2xl md:text-3xl text-[#00fff0] mb-4 mt-8 text-center">
         High Scores
       </h1>
-
-      {/* Data Source Indicator */}
-      <div className="mb-6 text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-900/30 border border-green-500/50 rounded text-xs">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-green-300">Connected to Redis Database</span>
-        </div>
-      </div>
 
       {loading ? (
         <div className="text-center text-gray-400">Loading scores...</div>
@@ -83,7 +75,10 @@ export default function HighScoresPage() {
             </thead>
             <tbody>
               {scores.map((player, i) => (
-                <tr key={i} className="border-t border-white/10 hover:bg-white/5">
+                <tr
+                  key={i}
+                  className="border-t border-white/10 hover:bg-white/5"
+                >
                   <td className="px-4 py-3 font-['Press_Start_2P'] text-sm text-[#ffc107]">
                     {i + 1}
                   </td>
@@ -118,4 +113,3 @@ export default function HighScoresPage() {
     </main>
   );
 }
-

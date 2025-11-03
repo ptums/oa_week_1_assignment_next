@@ -83,8 +83,12 @@ export function applyKeys(
 ```
 
 **Supported Commands**:
+- `h` - Move cursor left
+- `j` - Move cursor down
+- `k` - Move cursor up
+- `l` - Move cursor right
 - `x` - Delete character
-- `dd` - Delete line
+- `dd` - Delete line (supports counts: `2dd`, `3dd`, etc.)
 - `dw` - Delete word
 - `cw` - Change word
 - `yy` - Yank (copy) line
@@ -97,8 +101,9 @@ export function applyKeys(
 - `b` - Word backward
 
 **Command Parsing**:
-- Single character: `x`, `p`, `w`, `b`
+- Single character: `h`, `j`, `k`, `l`, `x`, `p`, `w`, `b`
 - Double character: `dd`, `dw`, `cw`, `yy`, `gg`
+- With counts: `2dd`, `3dd`, `5dd`, `10dd`
 - Uppercase: `G`
 - Special: `0`, `$`
 
@@ -119,21 +124,46 @@ export interface Question {
 
 #### Question Bank
 
+**Total Questions**: 19 (updated November 3, 2025)
+
 ```typescript
 export const QUESTION_BANK: Question[] = [
-  { id: 'dd', prompt: 'Delete the current line', expected: ['dd'] },
-  { id: 'gg', prompt: 'Go to the top of the file', expected: ['gg'] },
-  { id: 'G', prompt: 'Go to the bottom of the file', expected: ['G'] },
-  { id: 'dw', prompt: 'Delete a word', expected: ['dw'] },
-  { id: 'x', prompt: 'Delete a single character', expected: ['x'] },
-  { id: '0', prompt: 'Go to the start of the line', expected: ['0'] },
-  { id: '$', prompt: 'Go to the end of the line', expected: ['$'] },
-  { id: 'w', prompt: 'Move forward one word', expected: ['w'] },
-  { id: 'b', prompt: 'Move backward one word', expected: ['b'] },
-  { id: 'yy', prompt: 'Copy (yank) the current line', expected: ['yy'] },
-  { id: 'p', prompt: 'Paste below the cursor', expected: ['p'] },
+  // Basic operations (11 questions)
+  { id: 'del-line', prompt: 'Delete the current line', expected: ['dd', '1dd'] },
+  { id: 'yank-paste', prompt: 'Duplicate the current line (yank & paste)', expected: ['yy p', 'yyp'] },
+  { id: 'del-word', prompt: 'Delete the next word starting at cursor', expected: ['dw'] },
+  { id: 'change-word', prompt: 'Change the word under the cursor', expected: ['cw'] },
+  { id: 'move-top', prompt: 'Move to the top of the file', expected: ['gg'] },
+  { id: 'move-bottom', prompt: 'Move to the bottom of the file', expected: ['G'] },
+  { id: 'move-begin', prompt: 'Move to the beginning of the current line', expected: ['0'] },
+  { id: 'move-end', prompt: 'Move to the end of the current line', expected: ['$'] },
+  { id: 'word-forward', prompt: 'Jump forward one word', expected: ['w'] },
+  { id: 'word-backward', prompt: 'Jump backward one word', expected: ['b'] },
+  { id: 'delete-char', prompt: 'Delete the character under the cursor', expected: ['x'] },
+  
+  // Navigation commands (4 questions)
+  { id: 'move-left', prompt: 'Move cursor one character to the left', expected: ['h'] },
+  { id: 'move-down', prompt: 'Move cursor one line down', expected: ['j'] },
+  { id: 'move-up', prompt: 'Move cursor one line up', expected: ['k'] },
+  { id: 'move-right', prompt: 'Move cursor one character to the right', expected: ['l'] },
+  
+  // Deletion with counts (4 questions)
+  { id: 'del-2-lines', prompt: 'Delete 2 consecutive lines', expected: ['2dd'] },
+  { id: 'del-3-lines', prompt: 'Delete 3 consecutive lines', expected: ['3dd'] },
+  { id: 'del-5-lines', prompt: 'Delete 5 consecutive lines', expected: ['5dd'] },
+  { id: 'del-10-lines', prompt: 'Delete 10 consecutive lines', expected: ['10dd'] },
 ];
 ```
+
+**Categories**:
+- **Navigation**: `h`, `j`, `k`, `l`, `gg`, `G`, `0`, `$`, `w`, `b` (10 questions)
+- **Deletion**: `x`, `dd`, `2dd`, `3dd`, `5dd`, `10dd`, `dw` (7 questions)
+- **Editing**: `cw` (1 question)
+- **Copy/Paste**: `yy p` (1 question)
+
+**Note**: Standalone `yy` and `p` questions were removed because:
+- `yy` (yank) produces no visible change, making it confusing for learners
+- `p` (paste) requires prior yanked content, which doesn't exist in isolated questions
 
 #### Random Selection
 ```typescript
